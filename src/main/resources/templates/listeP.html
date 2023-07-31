@@ -1,0 +1,111 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+            crossorigin="anonymous"></script>
+
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar navbar-dark bg-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">Hobital</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="#">Patients</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Medcins</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                       data-bs-toggle="dropdown" aria-expanded="false">
+                        Crud
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <li><a class="dropdown-item" th:href="@{FormulaireAjouter}">Ajouter</a></li>
+                        <li><a class="dropdown-item" href="#">Chercher</a></li>
+
+                    </ul>
+                </li>
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                       data-bs-toggle="dropdown" aria-expanded="false">
+                        [Utilisateur]
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <li><a class="dropdown-item" href="#">connexion</a></li>
+                        <li><a class="dropdown-item" href="#">Déconnexion</a></li>
+
+                    </ul>
+                </li>
+            </ul>
+
+        </div>
+    </div>
+</nav>
+
+<div class="container mt-5">
+    <div class="card">
+        <div class=" card-header"><h1> Liste des patients</h1></div>
+        <div class="card-body">
+
+            <form th:method="get" , th:action="@{patients}">
+                <div class="form-group">
+                    <label>Name </label>
+                    <input type="text" name="NameChercher" th:value="${NameChercher}">
+                    <button class="btn btn-success"> chercher</button>
+
+                </div>
+
+            </form>
+            <table class="table">
+                <th> ID</th>
+                <th>NOM</th>
+                <th> PRENOM</th>
+                <th>TELEPHONE</th>
+                <th> DATE DE NAISSANCE</th>
+                <th> MALADE</th>
+                <tr th:each="p:${patients}">
+                    <td th:text="${p.id}"></td>
+                    <td th:text="${p.name}"></td>
+                    <td th:text="${p.prenom}"></td>
+                    <td th:text="${p.telephone}"></td>
+                    <td th:text="${p.dateNaissance}"></td>
+                    <td th:text="${p.malade}"></td>
+                    <td><a class="btn btn-danger"
+                           th:href="@{deletePage(id=${p.id} ,mc=${NameChercher},page=${pagecurrent},size=${size})}">
+                        Supprimer</a></td>
+
+                    <td><a class="btn btn-success" th:href="@{editPatient(id=${p.id})}"> Modifier</a></td>
+                </tr>
+            </table>
+            <ul class="nav nav-pills">
+                <li th:each="pages,status:${pages}">
+                    <a th:class="${status.index==pagecurrent}? 'btn btn-primary' : 'btn'  "
+                       th:href="@{patients(page=${status.index},NameChercher=${NameChercher})}"
+                       th:text="${status.index}"> </a>
+                </li>
+
+            </ul>
+
+
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
